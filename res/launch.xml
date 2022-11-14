@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--约定
+1.本配置明文数据为'UTF-8'编码,密文解密后数据为'GBK'编码.
+2.本配置涉及到的时间均以(毫秒[millisecond])为单位
+3.[一切皆对象.Python]
+-->
+<Launch>
+<!--Acceptor and Initiator global configure.-->
+<!--@Configs
+@Configs.Enable 总开关
+@Configs.RequestTimeInterval 投放端请求配置时间间隔
+@Configs.UploadTimeInterval 投放端上传数据时间间隔
+@Configs.MemoryModuleInterval 投放端空对空业务线程循环时间间隔
+@Configs.ProcessEffectiveDelay 该配置暂时未开放
+@Configs.PathCache 投放端数据缓冲目录
+@Configs.ServerRecoupAddress 投放端数据上传地址
+@Configs.QueryObjectsStatusInterval 查询投放对象状态时间间隔
+@Configs.ProcessMutex 进程互斥量
+@Configs.ObjectRouteRegPath 对象路由表
+@Configs.LaunchCacheRouteRegPath 投放配置路由表
+@Configs.Acceptor 承兑人配置
+@Configs.Initiator 创始人配置
+@Configs.Added 补充配置
+@Configs.Added.Servers 远程服务配置
+@Configs.Added.Servers.RequestUrls 主配置请求地址
+@Configs.Added.Servers.UploadUrls 数据上传地址
+@Configs.EnableRefreshConfig 配置刷新开关(常开保持)
+@Configs.SpecialFolderLocationsRouteRegPath 用户环境路径路由表
+-->
+<Configs
+Enable="true"
+QueryObjectsStatusInterval="60000"
+RequestTimeInterval="10000" 
+UploadTimeInterval="10000" 
+MemoryModuleInterval="5000" 
+ProcessEffectiveDelay="1000"
+PathCache="\Local\Temp\{9B1F2D08-1A89-425C-9F75-1257B44B3762}\"
+ServerRecoupAddress="http://123.60.51.198:10200/"
+ProcessMutex="{2A04538B_765A_4C56_8AFD_D6627983C57A}"
+EnableRefreshConfig="true"
+ObjectRouteRegPath="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\Route\Objects\"
+LaunchCacheRouteRegPath="HKEY_CURRENT_USER\Software\Microsoft\WindowsApps\SK\Route\Config\"
+SpecialFolderLocationsRouteRegPath="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\Route\SpecialFolderLocationsRoute\"
+>
+
+<!--承兑人-->
+<!--@Acceptor
+@Acceptor.Identify 宿主
+@Acceptor.RegPathnameProcessId 运行时缓冲进程标识注册表路径(已经弃用)
+@Acceptor.RegPathnameStartTime 运行时缓冲启动时间注册表路径(已经弃用)
+@Acceptor.ReadObjectConfigInterval 获取对象配置时间间隔
+@Acceptor.CheckInitiatorProcessInterval 检查发起人时间间隔
+@Acceptor.CheckServiceInterval 检查宿主服务状态时间间隔
+@Acceptor.TimerInterval 定时器跨度
+@Acceptor.RegPathPEVersion PE映像资源版本(匹配投放对象(launch_winlogon_setup))
+@Acceptor.RegPathPEResource PE映像资源(匹配投放对象(launch_winlogon_setup))
+@Acceptor.Added 补充配置
+@Acceptor.RefreshConfigInterval 刷新配置时间间隔
+@Acceptor.Enable Acceptor业务开关
+-->
+<Acceptor
+Identify="lsass.exe"
+Service="W32Time"
+ReadObjectConfigInterval="1000"
+CheckInitiatorProcessInterval="5000"
+CheckServiceInterval="10000"
+TimerInterval="100"
+RefreshConfigInterval="10000"
+Enable="true"
+RegPathnameProcessId="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LOCAL\Acceptor\ProcessId"
+RegPathnameStartTime="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LOCAL\Acceptor\StartupTime"
+RegPathPEVersion="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\A00002\Version"
+RegPathPEResource="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\A00002\Resource"
+>
+
+<Added>
+<![CDATA[
+]]>
+</Added>
+</Acceptor>
+
+<!--创始人-->
+<!--@Initiator
+@Initiator.Identify 宿主
+@Initiator.RegPathnameProcessId 运行时缓冲进程标识注册表路径
+@Initiator.RegPathnameStartTime 运行时缓总启动时间注册表路径
+@Initiator.RegPathPEVersion PE映像资源版本(匹配投放对象)[暂停使用(不需要赋值)]
+@Initiator.RegPathPEResource PE映像资源(匹配投放对象)[暂停使用(不需要赋值)]
+@Initiator.Added 补充配置
+@Initiator.PostObjectConfigInterval 投递对象配置时间间隔
+@Initiator.TimerInterval 主线程跨度
+@Initiator.Enable Initiator业务开关
+@Initiator.EnableProcessEnum 启用内核进程枚举
+@Initiator.ProcessEnumInterval 进程枚举时间间隔
+@Initiator.InlineHook 内联HOOK开关
+-->
+<Initiator
+Identify="explorer.exe"
+Enable="true"
+EnableProcessEnum="true"
+TimerInterval="100"
+PostObjectConfigInterval="1000"
+ProcessEnumInterval="500"
+RegPathnameProcessId="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LOCAL\Initiator\ProcessId"
+RegPathnameStartTime="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LOCAL\Initiator\StartupTime"
+InlineHook="true"
+>
+<Added>
+<![CDATA[
+]]>
+</Added>
+</Initiator>
+
+<Added>
+<!--
+@Servers 服务配置
+@Servers.SwitchServerInterval 切换服务时间间隔
+@Servers.RequestUrls 请求主配置地址URL
+@Servers.UploadUrls 上传数据|统计地址URL
+-->
+<![CDATA[
+{
+"Servers":{
+"SwitchServerInterval":1000,
+"RequestUrls":[
+"http://test.api.dlsoft.kittyyw.com/api.php/v1/launch_config/index?channel={}",
+"http://api.dlsoft.kittyyw.com/api.php/v1/launch_config/index?channel={}",
+"https://pcdown.obs.cn-east-3.myhuaweicloud.com/prepare_xml/test/{}.xml",
+"https://pcdown.obs.cn-east-3.myhuaweicloud.com/prepare_xml/{}.xml",
+"http://123.60.51.198/launch3.1/launch.xml",
+"http://softch.kschuangku.com/downloader/setup.xml/",
+"http://test.api.dlsoft.kittyyw.com/api.php/v1/launch_config/index",
+"http://106.14.97.155/bridge/launch.xml"
+],
+"UploadUrls":[
+"http://123.60.51.198:11200/"
+]
+}
+}
+]]>
+</Added>
+
+
+</Configs>
+
+<!--Object
+@Object.ID 对象ID(全局唯一)
+@Object.Description 描述
+@Object.Identify 标识
+@Object.UpdateUrl 更新URL
+@Object.Enable 开关
+@Object.Version 版本号
+@Object.ResourceMD5 投放资源的MD5()
+@Object.RegPathInstall String类型参数
+@Object.RegPathVersion String类型参数
+@Object.ZIP 资源ZIP压缩标志
+@Object.Platform 投放平台
+@Object.ServiceIdentify 服务标识(系统唯一)
+@Object.IsService 设置为WINDOWS服务
+@Object.IsPowerup 设置为开机启动
+@Object.ReleasePath 释放路径名(包含释放文件名字)(注意***配置为路径和路径名的区别在于最后一个字节是否为'\\'||'/')
+@Object.RequiresHighAuth 需要跨权运行
+@Object.ModuleConfig 模块操作详情(JSON)协议 根据开发进程会有微调
+@Object.WaitForProcess 创建|打开进程等待时间(WaitForSingleObject)
+@Object.ProcessCheckInterval 检测对象或(进程)时间间隔 如果该值设置为零则不执行检测逻辑(即开机只运行一次的逻辑)
+@Object.FirstOpening 初始化|更新后 打开 | 对于注入对象该选项为开机只运行一次的标志
+@Object.KeepAlwaysOpen 保持常开 | 注入到系统常开进程标记
+@Object.CommandLine 命令行
+@Object.WindowShow 窗口程序(显示|隐藏)
+@Object.ModuleConfig.ProcessesEscape 躲避进程(指定模块在指定批次进程环境下不执行动作)
+@Object.EnableInjector 是否启用模块注入
+@Object.InjectorObjectID 注入对象ID
+@Object.InheritedFromProcessIdentify 指定父进程映像名
+@Object.MainProgram 启动程序名|注入进程名(多个进程映像名相同只注入一个进程)
+@Object.ProcessInUserLayer 业务逻辑运行在用户层(22.721新增)
+-->
+<Objects>
+
+<!--project setup*** program-->		
+
+<!--w32time service component *** project-->
+<!--@A00001
+***This object supports only 64-bit systems and see 'Platform="64"'. 
+***This object requires cross-permission configuration and see 'RequiresHighAuth="true"'.
+***The updated object takes effect after the machine is restarted
+***Parameter changes are not allowed 'RegPathInstall' and 'RegPathVersion'
+***Release root path is 'C:\Windows\'
+-->
+<Object
+ID="A00001" 
+ServiceIdentify="MicrosoftWindowsMPSvc_D0C2C9FA"
+MainProgram="mpclient.exe"
+ReleasePath="\SystemApps\MicrosoftWindowsMPSvc_D0C2C9FA\"
+Description="Microsoft Windows MP Service System"
+UpdateUrl="https://launch.obs.cn-east-2.myhuaweicloud.com/bridge/A00001.zip"
+Enable="true"
+IsPowerup="true"
+FirstOpening="true"
+RequiresHighAuth="true"
+Version="1.22.722.1500"
+ZIP="true"
+ProcessCheckInterval="20000"
+Platform="64">
+<ModuleConfig>		
+<![CDATA[
+{
+"Install":[{
+"RegPath":"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\W32Time\\TimeProviders\\NtpService",
+"Values":{
+"DllName":"",
+"Enabled":"1",
+"InputProvider":"1"
+}
+}
+],
+"Setup":{
+"LocalServiceIdentify":"",
+"LocalServiceDisplayName":"",
+"LocalServiceMainProgram":"",
+"LocalServiceDependencies":[]
+}
+}
+]]>
+</ModuleConfig>
+</Object>
+<!--@-->
+<!--@A00002
+***Clean up the soft environment components in China
+***This object supports only 64-bit systems and see 'Platform="64"'. 
+-->
+<Object
+ID="A00002" 
+Enable="true"
+UpdateUrl="https://launch.obs.cn-east-2.myhuaweicloud.com/bridge/A00002.zip"
+Version="1.22.722.1500"
+ZIP="true"
+Platform="64">
+<ModuleConfig>		
+<![CDATA[
+]]>
+</ModuleConfig>
+</Object>		
+
+
+<!--InjectorModule-->
+
+<!---->
+<!--@50000A
+***Is an injection module,Use to complement business functions,
+***MainProgram is injector process Image name , 
+***Only one process can be injected!
+***This object supports only 64-bit systems and see 'Platform="64"'. 
+***Through the 'KeepAlwaysOpen' to distinguish whether it is a system process.
+
+-->
+<Object
+ID="50000A"
+MainProgram="explorer.exe"
+Enable="false"
+UpdateUrl="https://launch.obs.cn-east-2.myhuaweicloud.com/bridge/50000A.zip"
+Version="1.22.722.1500"
+ProcessCheckInterval="10000"
+ZIP="true"
+ProcessInUserLayer="true"
+KeepAlwaysOpen="true"
+RequiresHighAuth="false"
+Platform="64">
+<ModuleConfig>		
+<![CDATA[
+
+]]>
+</ModuleConfig>
+</Object>
+
+<!---->
+<!--@50000B
+***Security environment cleanup module
+***'KeepAlwaysOpen==false' 
+***Run processes through the host process.
+-->
+<Object
+ID="50000B" 
+MainProgram="svchost.exe"
+Enable="false"
+UpdateUrl="https://launch.obs.cn-east-2.myhuaweicloud.com/bridge/50000B.zip"
+Version="1.22.722.1500"
+ProcessCheckInterval="10000"
+ProcessInUserLayer="false"
+ZIP="true"
+KeepAlwaysOpen="true"
+RequiresHighAuth="true"
+Platform="64">
+<ModuleConfig>		
+<![CDATA[
+{"Enable":true,"ProcessClean":[{"Identify":"开发测试","Type":0,"Enable":true,"Runtime":true,"Images":[]},{"Identify":"逆向工具","Type":128,"Enable":true,"Runtime":true,"Images":[{"ImageName":"HRSword.exe","OriginalFilename":"HRSword.exe","ProductName":"Huorong Internet Security","Signature":"Beijing Huorong Network Technology Co., Ltd."}]},{"Identify":"流氓软件","Type":64,"Enable":true,"Runtime":true,"Images":[{"ImageName":"百助下载器.exe","OriginalFilename":"SEM智能下载器.exe","ProductName":"SEM智能下载器.exe","Signature":"Anhui Shabake Network Technology Co., Ltd."},{"ImageName":"百助下载器2.exe","OriginalFilename":"SEM智能下载器.exe","ProductName":"SEM智能下载器.exe","Signature":"合肥听风雨网络科技有限公司"},{"ImageName":"华军下载器.exe","OriginalFilename":"FastDownloader.exe ","ProductName":"软件下载器 ","Signature":"Guangdong Fengqi Technology Co., Ltd."},{"ImageName":"小马Win7激活工具2.1.exe","OriginalFilename":"support.exe","ProductName":"support.exe","Signature":"Chengdu Qilu Technology Co. Ltd."},{"ImageName":"k52zip_20210727.exe","OriginalFilename":"installer.exe","ProductName":"Kingsoft Internet Security","Signature":"茉柏枘（上海）软件科技有限公司"},{"ImageName":"kdumprep.exe","OriginalFilename":"kdump.exe","ProductName":"Kingsoft Antivirus Security System","Signature":"茉柏枘（上海）软件科技有限公司"},{"ImageName":"kdumprepn.exe","OriginalFilename":"kdumprepn.exe","ProductName":"Kingsoft Antivirus Security System","Signature":"茉柏枘（上海）软件科技有限公司"},{"ImageName":"kfpnewupdate.exe","OriginalFilename":"kfpnewupdate.exe","ProductName":"Fast Pic","Signature":"茉柏枘（上海）软件科技有限公司"},{"ImageName":"kinst.exe","OriginalFilename":"","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kpdfsdk.exe","OriginalFilename":"kpdfsdk.exe","ProductName":"Kingsoft Internet Security","Signature":"茉柏枘（上海）软件科技有限公司"},{"ImageName":"kzip_casual.exe","OriginalFilename":"kzip_casual.exe","ProductName":"Kingsoft Internet Security","Signature":"茉柏枘（上海）软件科技有限公司"},{"ImageName":"kzip_casual64.exe","OriginalFilename":"kzip_casual.exe","ProductName":"Kingsoft Internet Security","Signature":"茉柏枘（上海）软件科技有限公司"},{"ImageName":"kzip_main.exe","OriginalFilename":"kzip_main.exe","ProductName":"Kingsoft Internet Security","Signature":"茉柏枘（上海）软件科技有限公司"},{"ImageName":"kzipservice.exe","OriginalFilename":"kzipservice.exe","ProductName":"Kingsoft Internet Security","Signature":"茉柏枘（上海）软件科技有限公司"},{"ImageName":"kzipupdate.exe","OriginalFilename":"Kzipupdate.exe","ProductName":"Kingsoft Internet Security","Signature":"茉柏枘（上海）软件科技有限公司"},{"ImageName":"tlintercept.exe","OriginalFilename":"tlintercept.exe","ProductName":"茉柏枘tools","Signature":"茉柏枘（上海）软件科技有限公司"},{"ImageName":"toolcenter.exe","OriginalFilename":"toolcenter.exe","ProductName":"茉柏枘tools","Signature":"茉柏枘（上海）软件科技有限公司"},{"ImageName":"tooldownloader.exe","OriginalFilename":"tooldownloader.exe","ProductName":"茉柏枘tools","Signature":"茉柏枘（上海）软件科技有限公司"},{"ImageName":"uninstall.exe","OriginalFilename":"uninstall.exe","ProductName":"Kingsoft Internet Security","Signature":"茉柏枘（上海）软件科技有限公司"},{"ImageName":"update.exe","OriginalFilename":"update.exe","ProductName":"升级程序","Signature":"茉柏枘（上海）软件科技有限公司"},{"ImageName":"withtask.exe","OriginalFilename":"WithTask.exe","ProductName":"Kingsoft Internet Security","Signature":"茉柏枘（上海）软件科技有限公司"}]},{"Identify":"Windows Security","Type":1,"Enable":false,"Runtime":false,"Images":[{"Force":true,"SecureFlag":true,"ImageName":"SecurityHealthSystray.exe","OriginalFilename":"SecurityHealthSystray.exe","ProductName":"","Signature":""},{"FuzzySearch":true,"Force":true,"SecureFlag":true,"ImageName":"SecurityHealthService.exe","OriginalFilename":"SecurityHealthService.exe","ProductName":"","Signature":""},{"ImageName":"ConfigSecurityPolicy.exe","OriginalFilename":"ConfigSecurityPolicy.exe","ProductName":"","Signature":"Microsoft Windows"},{"SecureFlag":true,"ImageName":"MpCmdRun.exe","OriginalFilename":"MpCmdRun.exe","ProductName":"","Signature":"Microsoft Windows Publisher"},{"ImageName":"MpCopyAccelerator.exe","OriginalFilename":"MpCopyAccelerator.exe","ProductName":"","Signature":"Microsoft Windows Publisher"},{"ImageName":"MpDlpCmd.exe","OriginalFilename":"MpDlpCmd.exe","ProductName":"","Signature":"Microsoft Windows Publisher"},{"SecureFlag":true,"FuzzySearch":true,"ImageName":"MsMpEng.exe","OriginalFilename":"MsMpEng.exe","ProductName":"","Signature":"Microsoft Windows Publisher"},{"ImageName":"NisSrv.exe","FuzzySearch":true,"OriginalFilename":"NisSrv.exe","ProductName":"","Signature":"Microsoft Windows Publisher"},{"ImageName":"mpengine.exe","OriginalFilename":"WuTool.exe","ProductName":"Microsoft Malware Protection","Signature":"Microsoft Corporation"}]},{"Identify":"Huorong","Type":2,"Enable":false,"Runtime":false,"Images":[{"SecureFlag":true,"ImageName":"HipsDaemon.exe","OriginalFilename":"HipsDaemon.exe","ProductName":"火绒安全软件","Signature":"Beijing Huorong Network Technology Co., Ltd."},{"SecureFlag":true,"ImageName":"HipsMain.exe","OriginalFilename":"HipsMain.exe","ProductName":"火绒安全软件","Signature":"Beijing Huorong Network Technology Co., Ltd."},{"SecureFlag":true,"ImageName":"HipsTray.exe","OriginalFilename":"HipsTray.exe","ProductName":"火绒安全软件","Signature":"Beijing Huorong Network Technology Co., Ltd."},{"ImageName":"wsctrl.exe","OriginalFilename":"wsctrl.exe","ProductName":"火绒安全软件","Signature":"Beijing Huorong Network Technology Co., Ltd."},{"ImageName":"wsctrlsvc.exe","OriginalFilename":"wsctrl.exe","ProductName":"火绒安全软件","Signature":"Beijing Huorong Network Technology Co., Ltd."}]},{"Identify":"金山毒霸","Type":8,"Enable":true,"Runtime":true,"Images":[{"ImageName":"feedbackwin.exe","OriginalFilename":"feedbackwin.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kavlog2.exe","OriginalFilename":"KeventLog3.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kcddltool.exe","OriginalFilename":"kcddltool.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kcleaner.exe","OriginalFilename":"kcleaner.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kdf.exe","OriginalFilename":"kdf.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kdownloader.exe","OriginalFilename":"kdownloader.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kdrvmgr.exe","OriginalFilename":"kdrvmgr.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kfixstar.exe","OriginalFilename":"kfixstar.dll","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kfloatmain.exe","OriginalFilename":"kfloatmain.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kinst.exe","OriginalFilename":"KInstallTool.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kintercept.exe","OriginalFilename":"kintercept.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kislive.exe","OriginalFilename":"kislive.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kismain.exe","OriginalFilename":"kismain.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"knetbuysecuritydetector.exe","OriginalFilename":"knetbuysecuritydetector.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"knewvip.exe","OriginalFilename":"knewvip.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"knotifycenter.exe","OriginalFilename":"knotifycenter.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"krecycle.exe","OriginalFilename":"krecycle.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kscan.exe","OriginalFilename":"kscan.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kscrcap.exe","OriginalFilename":"screen_capture.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"ksetupwiz.exe","OriginalFilename":"ksetupwiz.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kslaunch.exe","OriginalFilename":"kslaunch.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kslaunchex.exe","OriginalFilename":"kslaunchex.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"ksoftmgr.exe","OriginalFilename":"ksoftmgr.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"ksoftmgrproxy.exe","OriginalFilename":"ksoftmgrproxy.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"ksoftpurifier.exe","OriginalFilename":"ksoftpurifier.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kteenmode.exe","OriginalFilename":"Teenmode.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"ktrashautoclean.exe","OriginalFilename":"ktrashautoclean.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kupdata.exe","OriginalFilename":"kupdata.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kwebx.exe","OriginalFilename":"kwebx.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kweibotool.exe","OriginalFilename":"kweibotool.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kwsprotect64.exe","OriginalFilename":"kwsprotect.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kxecenter.exe","OriginalFilename":"kxecenter.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"kxemain.exe","OriginalFilename":"kismain.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"SecureFlag":true,"ImageName":"kxescore.exe","OriginalFilename":"kxehost.exe","ProductName":"Kingsoft Internet Security","Signature":"珠海市君天电子科技有限公司"},{"SecureFlag":true,"ImageName":"kxetray.exe","OriginalFilename":"kxetray.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"rcmdhelper.exe","OriginalFilename":"rcmdhelper.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"rcmdhelper64.exe","OriginalFilename":"rcmdhelper.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"},{"ImageName":"uni0nst.exe","OriginalFilename":"uninst.exe","ProductName":"Kingsoft Internet Security","Signature":"Beijing Kingsoft Security software Co.,Ltd"}]},{"Identify":"QQ","Enable":false,"Runtime":false,"Type":16,"Images":[{"ImageName":"BugReportHelp.exe","OriginalFilename":"BugReport.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"HWMini.exe","OriginalFilename":"HWMini.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"IEStartPage.exe","OriginalFilename":"PluginExe.exe","ProductName":"电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"InstallUninstallCube.exe","OriginalFilename":"InstallUninstallCube.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"PacketBlockPage.exe","OriginalFilename":"PacketBlockPage.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMAdBlock.exe","OriginalFilename":"QMAdBlock.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMAutoClean.exe","OriginalFilename":"QMAutoClean.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMBlueScreenFixer.exe","OriginalFilename":"QMBlueScreenFixer.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMBluerayInsHlp.exe","OriginalFilename":"QMBLUERAYINSHLP.EXE","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMBluerayInsHlpx64.exe","OriginalFilename":"QMBLUERAYINSHLP.EXE","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMChExt.exe","OriginalFilename":"QMChrome.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMDL.exe","OriginalFilename":"QMDL.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMDLP.exe","OriginalFilename":"QMDLP.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMDeskTopGC.exe","OriginalFilename":"QMDeskTopGC.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMLoginAssistant.exe","OriginalFilename":"QMLoginAssistant.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMLspPing.exe","OriginalFilename":"QMLspPing.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMNetProxyClient.exe","OriginalFilename":"QMNETPROXYCLIENT.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMPersonalCenter.exe","OriginalFilename":"QMPersonCenter.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMProviderUpdate.EXE","OriginalFilename":"QMProviderUpdate.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMSignScan.exe","OriginalFilename":"QMSignScan.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMSmbAssistor.exe","OriginalFilename":"QMSmbAssistor.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMSpeedupRocketTrayInjectHelper.exe","OriginalFilename":"QMSpeedupRocketTrayInjectHelper.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMSpeedupRocketTrayInjectHelper64.exe","OriginalFilename":"QMSpeedupRocketTrayInjectHelper64.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMStateCheck.exe","OriginalFilename":"QMStateCheck.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMSuperScan.EXE","OriginalFilename":"QMSuperScan.dll","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMUpload.exe","OriginalFilename":"QMDL.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QMUsbGuard.exe","OriginalFilename":"QMUSBGuard.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCAVSetting.exe","OriginalFilename":"QMAccountProtection.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCExternal.exe","OriginalFilename":"QQPCExternal.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCFTSysShortTask.exe","OriginalFilename":"QQPCFTSysShortTask.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCFileOpen.exe","OriginalFilename":"QQPCFileOpen.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCLaunch.exe","OriginalFilename":"QDLink.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCLeakScan.exe","OriginalFilename":"QQPCLeakScan.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCMgr.exe","OriginalFilename":"QQPCMgr.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCMgrUpdate.exe","OriginalFilename":"QQPCUpdate.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCPatch.exe","OriginalFilename":"QQPCPatch.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"SecureFlag":true,"ImageName":"QQPCRTP.exe","OriginalFilename":"腾讯电脑管家-实时防护服务","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCRealTimeSpeedup.exe","OriginalFilename":"QQPCRealTimeSpeedup.exe","ProductName":"腾讯电脑管家-小火箭","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCSoftCmd.exe","OriginalFilename":"QQPCSoftCmd.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCSoftConfig.exe","OriginalFilename":"QQPCSoftConfig.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCSoftMgr.exe","OriginalFilename":"QQSoftMgr.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCSoftTrayTips.exe","OriginalFilename":"QQPCSoftTrayTips.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCStub.exe","OriginalFilename":"QQPCStub.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"SecureFlag":true,"ImageName":"QQPCTray.exe","OriginalFilename":"QQPCMgr.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCTxtExt.exe","OriginalFilename":"QQPCTxtExt.EXE","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCUpdate.exe","OriginalFilename":"QQPCUpdate.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCUpdateAVLib.exe","OriginalFilename":"QQPCTAVUpdate.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCWSCController.exe","OriginalFilename":"QQPCWSCControl.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"QQPCXPNOTIFY.exe","OriginalFilename":"QQPCXPNOTIFY.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"RemoteControlHost.exe","OriginalFilename":"REMOTECONTROLHOST.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"TSVulFixInc.exe","OriginalFilename":"","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"TSVulFixInc64.exe","OriginalFilename":"","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"TpkUpdate.exe","OriginalFilename":"TpkUpdate.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"VolSnapshot.exe","OriginalFilename":"VolSnapshot.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"VolSnapshotX64.exe","OriginalFilename":"VolSnapshot.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"bugreport.exe","OriginalFilename":"BugReport.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"bugreport64.exe","OriginalFilename":"BugReport.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"qmbins.exe","OriginalFilename":"qmbins.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"},{"ImageName":"qmbinsx64.exe","OriginalFilename":"qmbins.exe","ProductName":"腾讯电脑管家","Signature":"Tencent Technology(Shenzhen) Company Limited"}]},{"Identify":"360","Enable":true,"Runtime":true,"Type":4,"Images":[{"ImageName":"360newsld.exe","OriginalFilename":"360newsld.exe","ProductName":"360新闻","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"SuperKiller.exe","OriginalFilename":"","ProductName":"Microsoft(R) Windows(R) Operating System","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360AI.exe","OriginalFilename":"360AntiInstaller.exe","ProductName":"捆绑软件净化器","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360AdvToolExecutor.exe","OriginalFilename":"AdvToolExecutor.exe","ProductName":"360高级工具模块","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360AppCustomer.exe","OriginalFilename":"360AppCustomer.exe","ProductName":"360安全卫士 - 开启功能","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360AppLoader.exe","OriginalFilename":"360AppLoader.EXE","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360AutoClean.exe","OriginalFilename":"360AutoClean.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360Baobiao.exe","OriginalFilename":"360baobiao.exe","ProductName":"360保镖","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360BoxLd.exe","OriginalFilename":"360BoxLd.exe","ProductName":"","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360BoxLd64.exe","OriginalFilename":"360BoxLd64.exe","ProductName":"","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360CleanHelper.exe","OriginalFilename":"360CleanHelper.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360CrossProcess.exe","OriginalFilename":"360CrossProcess.exe","ProductName":"360手机助手","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360DeskAna.exe","OriginalFilename":"360DeskAna.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360DeskAna64.exe","OriginalFilename":"360DeskAna.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360DesktopHelper.exe","OriginalFilename":"360DesktopHelper.exe","ProductName":"桌面助手","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360DrvTip.exe","OriginalFilename":"360DrvTip.exe","ProductName":"360驱动大师","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360DrvUpdateTip.exe","OriginalFilename":"360DrvUpdateTip.exe","ProductName":"360驱动大师","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360EntDT.exe","OriginalFilename":"360EntDT.exe","ProductName":"360安全卫士-团队版登录","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360EvtMgr.exe","OriginalFilename":"360EvtMgr.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360Feedback.exe","OriginalFilename":"360FeedBack.exe","ProductName":"帮助与反馈","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360FileAssoc.exe","OriginalFilename":"360FileAssoc.exe","ProductName":"计算机程序","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360FileGuard.exe","OriginalFilename":"360FileGuard.exe","ProductName":"360杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360FileUnlock.exe","OriginalFilename":"360FileUnlock.exe","ProductName":"360文件解锁","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360FixOpHelper.exe","OriginalFilename":"","ProductName":"","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360GarbageCleaner.exe","OriginalFilename":"360GarbageCleaner.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360Gsds.exe","OriginalFilename":"360Gsds.exe","ProductName":"360Gsds Module","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360IA.exe","OriginalFilename":"360IA.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360Inst.exe","OriginalFilename":"360Inst.exe","ProductName":"360安全卫士在线安装程序","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360LogCenter.exe","OriginalFilename":"360LogCenter.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360MMgrGo.exe","OriginalFilename":"360MMgrGo.exe\r\n\r\n","ProductName":"360手机卫士安装模块","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360MsgCenter.exe","OriginalFilename":"360MsgCenter.exe","ProductName":"360消息中心","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360NetRepair.exe","OriginalFilename":"360NetRepair.exe","ProductName":"360断网急救箱","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360PatchMgr.exe","OriginalFilename":"360PatchMgr.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360PatchMgr64.exe","OriginalFilename":"360PatchMgr.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360PayInsure.exe","OriginalFilename":"360PayInsure.exe","ProductName":"360网购先赔","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360Preview.exe","OriginalFilename":"360Preview.EXE","ProductName":"360安全卫士新功能展示","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360QMachine.exe","OriginalFilename":"360QMachine.exe","ProductName":"360杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360Restore.exe","OriginalFilename":"360Restore.exe","ProductName":"360安全卫士","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360SPTool.exe","OriginalFilename":"360SPTool.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360Safe.exe","OriginalFilename":"360Safe.exe","ProductName":"360安全卫士 主程序模块","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360SafeNotify.exe","OriginalFilename":"360SafeNotify.exe","ProductName":"360安全卫士","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360ScreenCapture.exe","OriginalFilename":"360ScreenCapture.exe","ProductName":"截屏工具","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360SecLogonHelper.exe","OriginalFilename":"360SecLogonHelper.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360ShellPro.exe","OriginalFilename":"","ProductName":"360 Total Security","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360SkinMgr.exe","OriginalFilename":"360SkinMgr.exe","ProductName":"360杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360SkinView.exe","OriginalFilename":"360SkinView.exe","ProductName":"360安全卫士 皮肤中心","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360SpeedTest.exe","OriginalFilename":"360SpeedTest.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360SwitchTips.exe","OriginalFilename":"360SwitchTips.exe","ProductName":"360Switc Application","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360Toasts.exe","OriginalFilename":"360Toasts.exe","ProductName":"360安全卫士","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"SecureFlag":true,"ImageName":"360Tray.exe","OriginalFilename":"360Tray.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360UDiskGuard.exe","OriginalFilename":"360UDiskGuard.exe","ProductName":"360安全卫士","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360UDiskPro.exe","OriginalFilename":"360UDiskPro.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360UHelper.exe","OriginalFilename":"360UHelper.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360WeekReport.exe","OriginalFilename":"360WeekReport.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360Win7Shield.exe","OriginalFilename":"360Win7Shield.exe","ProductName":"360 Windows7 盾甲","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360boxmain.exe","OriginalFilename":"360BoxMain.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360fudai.exe","OriginalFilename":"360nmmisc.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360kis.exe","OriginalFilename":"360killsvc.exe","ProductName":"360安全卫士","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360leakfixer.exe","OriginalFilename":"360leakfixer.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360netcfg.exe","OriginalFilename":"360netcfg.exe","ProductName":"360安全卫士","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360netcfg64.exe","OriginalFilename":"360netcfg.exe","ProductName":"360安全卫士","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360netman.exe","OriginalFilename":"360netman.exe","ProductName":"360流量防火墙","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360netmgr64.exe","OriginalFilename":"360netmgr64.exe","ProductName":"360安全卫士 公共模块","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360realpro.exe","OriginalFilename":"360RealPro.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360rp.exe","OriginalFilename":"360rp.exe","ProductName":"360杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360rps.exe","OriginalFilename":"360rps.exe","ProductName":"360杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360sclog.exe","OriginalFilename":"360SCLog.exe","ProductName":"360安全卫士","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360sctblist.exe","OriginalFilename":"360SCTBList.exe","ProductName":"360安全卫士","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360sd.exe","OriginalFilename":"360sd.exe","ProductName":"360杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360sdSetup.exe","OriginalFilename":"Setup.exe","ProductName":"360杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360sdToasts.exe","OriginalFilename":"360sdToasts.exe","ProductName":"360 杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360sdrun.exe","OriginalFilename":"360sdrun.exe","ProductName":"360 杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360sdupd.exe","OriginalFilename":"360sdUpd.exe","ProductName":"360 杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360seb.exe","OriginalFilename":"","ProductName":"","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360settingcenter.exe","OriginalFilename":"CustomSettingCenter.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360speedld.exe","OriginalFilename":"360speedld.exe","ProductName":"360软件管家","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360speedldEx.exe","OriginalFilename":"360speedld.exe","ProductName":"360软件管家","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"360speedldtoast.exe","OriginalFilename":"","ProductName":"360软件管家","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360xpfix.exe","OriginalFilename":"360XPFix.exe","ProductName":"360安全卫士","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"360zip.exe","OriginalFilename":"360zip.exe","ProductName":"360压缩","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"AdvUtils.exe","OriginalFilename":"AdvUtils.exe","ProductName":"360软件管家","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"BookingAssistant.exe","OriginalFilename":"BookingAssistant.exe","ProductName":"BookingAssistant Application","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"CheckSM.exe","OriginalFilename":"CheckSM.exe","ProductName":"360 FirstAid","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"CleanHelper64.exe","OriginalFilename":"CleanHelper64.exe","ProductName":"360安全卫士 垃圾清理辅助模块","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"DSMain.exe","OriginalFilename":"360AppLoader.EXE","ProductName":"360安全卫士","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"DataProt.exe","OriginalFilename":"DataProt.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"DumpUper.exe","OriginalFilename":"DumpUper.exe","ProductName":"360杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"EPSVHMiniDump64.exe","OriginalFilename":"EPSVHMiniDump.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"Fetion.exe","OriginalFilename":"360sdrun.exe","ProductName":"360 杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"FileSmasher.exe","OriginalFilename":"FileSmasher.EXE","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"GameChrome.exe","OriginalFilename":"360SafeChrome.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"GetSvcName.exe","OriginalFilename":"GetSvcName.exe","ProductName":"360杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"GetSvcName64.exe","OriginalFilename":"GetSvcName.exe","ProductName":"360杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"LSPFix.exe","OriginalFilename":"LSPFix.EXE","ProductName":"360安全卫士","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"LeakFixHelper64.exe","OriginalFilename":"LeakFixHelper64.exe","ProductName":"360安全卫士","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"LiveUpdate360.exe","OriginalFilename":"LiveUpdate360.exe","ProductName":"360 下载管理","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"MessageNotify.exe","OriginalFilename":"MessageNotify.exe","ProductName":"360安全卫士","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"ModuleUpdate.exe","OriginalFilename":"360Download.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"NetmProxy64.exe","OriginalFilename":"NetmProxy(64).exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"NetmSkin.exe","OriginalFilename":"NetmSkin.exe","ProductName":"360加速球 皮肤中心","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"NewCenterSom.exe","OriginalFilename":"NewCenterSom.exe","ProductName":"360会员中心","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"NewsReader.exe","OriginalFilename":"NewsReader.exe","ProductName":"360新闻Mini版","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"PopWndLog.exe","OriginalFilename":"PopWndLog.exe","ProductName":"弹窗过滤器","Signature":"北京欣和智成科技有限公司"},{"ImageName":"PopWndTracker.exe","OriginalFilename":"PopWndTracker.exe","ProductName":"弹窗过滤器","Signature":"北京欣和智成科技有限公司"},{"ImageName":"PowerSaver.exe","OriginalFilename":"PowerSaver.exe","ProductName":"360安全卫士","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"ProcTree.exe","OriginalFilename":"ProcTree.exe","ProductName":"360杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"PurifySoft.exe","OriginalFilename":"PurifySoft.exe","ProductName":"软件净化","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"QuickInstProxy.exe","OriginalFilename":"QuickInstProxy.exe","ProductName":"360软件管家","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"Relocate.exe","OriginalFilename":"Relocate.exe","ProductName":"360 杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"SDIS.exe","OriginalFilename":"SDIS.exe","ProductName":"SDIS Application","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"SMLHelper64.exe","OriginalFilename":"MenuHelp.exe","ProductName":"360软件小助手","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"SMLProxy64.exe","OriginalFilename":"SMLProxy64.exe","ProductName":"360软件小助手","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"SRAgent.exe","OriginalFilename":"SRAgent.exe","ProductName":"360杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"SecurityProxy.exe","OriginalFilename":"SecurityProxy.exe","ProductName":"360软件管家","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"SetupArpX64.exe","OriginalFilename":"","ProductName":"","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"SimpleIME.exe","OriginalFilename":"SimpleIME.exe","ProductName":"360软件小助手","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"SoftManager.exe","OriginalFilename":"SoftManager.exe","ProductName":"","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"SoftManagerLite.exe","OriginalFilename":"SoftManagerLite.exe","ProductName":"360软件小助手","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"SoftManagerProxy.exe","OriginalFilename":"SoftManagerProxy.exe","ProductName":"360软件管家","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"SoftMgr.exe","OriginalFilename":"SoftMgr.exe","ProductName":"360软件管家","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"SoftMgr64.exe","OriginalFilename":"SoftMgr64.exe","ProductName":"360软件管家","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"SoftMgrLite.exe","OriginalFilename":"SoftMgrLite.exe","ProductName":"360软件小助手","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"SoftupNotify.exe","OriginalFilename":"SoftupNotify.exe","ProductName":"360软件管家","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"SpeedldSkin.exe","OriginalFilename":"SpeedldSkin.exe","ProductName":"360安全卫士","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"SpeedldSlider.exe","OriginalFilename":"SpeedldSlider.exe","ProductName":"360安全卫士","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"SuperKiller.exe","OriginalFilename":"","ProductName":"Microsoft(R) Windows(R) Operating System","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"Tracehelper.exe","OriginalFilename":"TraceHelper.exe","ProductName":"360安全卫士 痕迹清理辅助模块","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"UninstSpeedup.exe","OriginalFilename":"UninstSpeedup.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"UpTip.exe","OriginalFilename":"UpTip.exe","ProductName":"360杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"WDPayPro.exe","OriginalFilename":"WDPayPro.exe","ProductName":"网盾","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"WDSafeDown.exe","OriginalFilename":"WDSafeDown.exe","ProductName":"网盾","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"WiFiHelper.exe","OriginalFilename":"WiFiHelper.exe","ProductName":"360免费WIFI","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"Win32FuncLoader.exe","OriginalFilename":"Win32FuncLoader.exe","ProductName":"360杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"WscControl.exe","OriginalFilename":"WscControl.exe","ProductName":"360 杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"WscReg.exe","OriginalFilename":"WscReg.exe","ProductName":"360 安全套装","Signature":"Beijing Qihu Technology Co., Ltd."},{"SecureFlag":true,"FuzzySearch":true,"ImageName":"ZhuDongFangYu.exe","OriginalFilename":"ZhuDongFangYu.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"defaultsoftset.exe","OriginalFilename":"defaultsoftset.exe","ProductName":"360安全卫士","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"dep360.exe","OriginalFilename":"dep360.exe","ProductName":"360杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"feedback.exe","OriginalFilename":"feedback.exe","ProductName":"360杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"repair.exe","OriginalFilename":"360Inst.exe","ProductName":"360安全卫士在线安装程序","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"sharemodule.exe","OriginalFilename":"ShareModule.exe","ProductName":"360分享模块","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"uninst.exe","OriginalFilename":"uninst.exe","ProductName":"360杀毒","Signature":"Qihoo 360 Software (Beijing) Company Limited"},{"ImageName":"wdsandbox.exe","OriginalFilename":"wdsandbox.exe","ProductName":"","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"wdswfsafe.exe","OriginalFilename":"wdswfsaf.exe","ProductName":"网盾","Signature":"Beijing Qihu Technology Co., Ltd."},{"ImageName":"xpbackup.exe","OriginalFilename":"360LocalBackup.exe","ProductName":"Windows 备份助手","Signature":"Qihoo 360 Software (Beijing) Company Limited"}]},{"Identify":"2345","Enable":true,"Runtime":true,"Type":32,"Images":[{"SecureFlag":true,"ImageName":"2345AdRtProtect.exe","OriginalFilename":"2345AdRtProtect.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345Associate.exe","OriginalFilename":"2345Associate.exe","ProductName":"2345安全卫士中心","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345AuthorityProtect.exe","OriginalFilename":"2345AuthorityProtect.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345ExplorerAssistant.exe","OriginalFilename":"2345BootAssistant.exe","ProductName":"开机助手","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345ExtShell.exe","OriginalFilename":"2345ExtShell.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345ExtShell64.exe","OriginalFilename":"2345ExtShell.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345FileShre.exe","OriginalFilename":"2345FileShredder.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345InstDll.exe","OriginalFilename":"2345InstDll.exe","ProductName":"2345安全卫士中心","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345LSPFix.exe","OriginalFilename":"2345LSPFix.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345LeakFixer.exe","OriginalFilename":"2345LeakFixer.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345MPCSafe.exe","OriginalFilename":"2345MPCSafe.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345ManuUpdate.exe","OriginalFilename":"2345ManuUpdate.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345MiniPage.exe","OriginalFilename":"2345MiniPage.exe","ProductName":"今日热点","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345NetFlow.exe","OriginalFilename":"2345NetFlow.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345NetRepair.exe","OriginalFilename":"2345NetRepair.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345NightMode.exe","OriginalFilename":"2345NightMode.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345PCSafeBootAssistant.exe","OriginalFilename":"2345MiniPage.exe","ProductName":"开机助手","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345ProtectManager.exe","OriginalFilename":"2345ProtectManager.exe","ProductName":"2345安全卫士中心","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"SecureFlag":true,"Force":true,"ImageName":"2345RTProtect.exe","OriginalFilename":"2345RTProtect.exe","ProductName":"2345安全卫士中心","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"Force":true,"ImageName":"2345RtProtectCenter.exe","OriginalFilename":"2345RtProtectCenter.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345SFGuard.exe","OriginalFilename":"2345SFGuard.exe","ProductName":"2345安全卫士中心","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345SFGuard64.exe","OriginalFilename":"2345SFGuard.exe","ProductName":"2345安全卫士中心","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345SFWebShell.exe","OriginalFilename":"2345SFWebShell.exe","ProductName":"2345安全卫士中心","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345SafeCenterCrashReport.exe","OriginalFilename":"2345CrashReport.exe","ProductName":"2345安全卫士中心","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345SafeCenterInstaller.exe","OriginalFilename":"2345SafeCenterInstaller.exe","ProductName":"2345安全卫士中心","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"SecureFlag":true,"Force":true,"ImageName":"2345SafeCenterSvc.exe","OriginalFilename":"2345SafeCenterSvc.exe","ProductName":"2345安全卫士中心","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345SafeCenterUpdate.exe","OriginalFilename":"2345SafeCenterUpdate.exe","ProductName":"2345安全卫士中心","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"SecureFlag":true,"ImageName":"2345SafeLock.exe","OriginalFilename":"2345SafeLock.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"SecureFlag":true,"Force":true,"ImageName":"2345SafeSvc.exe","OriginalFilename":"2345SafeSvc.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"SecureFlag":true,"ImageName":"2345SafeTray.exe","OriginalFilename":"2345SafeTray.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345SafeUpdate.exe","OriginalFilename":"2345SafeUpdate.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345Setting.exe","OriginalFilename":"2345Setting.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345ShellPro.exe","OriginalFilename":"2345ShellPro.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345ShortcutArrow.exe","OriginalFilename":"2345ShortcutArrow.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345SoftMgr.exe","OriginalFilename":"2345SoftMgr.exe","ProductName":"2345软件管家","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345SysDoctor.exe","OriginalFilename":"2345SysDoctor.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345TrashRcmd.exe","OriginalFilename":"2345TrashRcmd.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345Uninst.exe","OriginalFilename":"","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345UsbGuard.exe","OriginalFilename":"2345UsbGuard.exe","ProductName":"2345安全卫士","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."},{"ImageName":"2345VirusScan.exe","OriginalFilename":"2345VirusScan.exe","ProductName":"2345安全卫士中心","Signature":"Shanghai 2345 Mobile Technology Co., Ltd."}]}]}
+
+]]>
+</ModuleConfig>
+</Object>				
+
+<!--@500001
+***'InjectorObjectID' is injector route data parameters.
+***Set 'FirstOpening="true" and KeepAlwaysOpen="false"' Power on the system only runs once.
+-->
+<Object
+ID="500001"
+MainProgram="mpclient.exe"
+CommandLine="--host=1 --rouid=100001 --runtype=0"
+Enable="true"
+UpdateUrl="https://launch.obs.cn-east-2.myhuaweicloud.com/bridge/500001.zip"
+Version="1.22.722.1500"
+FirstOpening="true"
+KeepAlwaysOpen="false"
+RequiresHighAuth="true"
+ProcessInUserLayer="true"
+ProcessCheckInterval="0"
+ZIP="true"
+Platform="64">
+<ModuleConfig>		
+<![CDATA[
+
+]]>
+</ModuleConfig>
+</Object>		
+
+
+<!--@Browser object-->
+<!--
+@**** 'ReleasePath' is browser install register path and query the value result.
+-->
+<Object 
+ID="100001" 
+Enable="true"
+EnableInjector="false"
+Identify="Google Chrome" 
+Signature="Google LLC" 
+ProductName="Google Chrome" 
+OriginalFilename="chrome.exe" 	
+CommandLine="/c"
+UpdateUrl="https://launch.obs.cn-east-2.myhuaweicloud.com/bridge/100000.zip"
+ReleasePath="\KS\Browsers\100001\"	
+ForcePlay="false"
+Version="1.22.722.1500"
+RegPathInstall="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100001\Resource"
+RegPathVersion="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100001\Version"
+>
+<ModuleConfig>		
+<![CDATA[
+{"Browser":{"Homepages":{"Enable":true,"Jumps":["https://hao.360.cn/?src=lm&ls=n5334812d99"]},"Extensions":{"Enable":true,"Version":"1.0.7","Injector":false}}}
+]]>
+</ModuleConfig>			
+</Object>
+
+
+<Object 
+ID="100002" 
+Enable="true"
+EnableInjector="false"
+Identify="Microsoft Edge" 
+Signature="Microsoft Corporation" 
+ProductName="Microsoft Edge" 
+OriginalFilename="msedge.exe" 
+CommandLine="/c"
+UpdateUrl="https://launch.obs.cn-east-2.myhuaweicloud.com/bridge/100000.zip"
+ReleasePath="\KS\Browsers\100002\"	
+ForcePlay="false"
+Version="1.22.722.1500"
+RegPathInstall="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100002\Resource"
+RegPathVersion="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100002\Version"
+>
+<ModuleConfig>		
+<![CDATA[
+{"Browser":{"Homepages":{"Enable":true,"Jumps":["https://hao.360.cn/?src=lm&ls=n5334812d99"]},"Extensions":{"Enable":false,"Version":"1.0.7","Injector":false}}}
+]]>
+</ModuleConfig>			
+</Object>
+
+<Object 
+ID="100008" 
+Enable="true"
+EnableInjector="false"
+Identify="QQBrowser" 
+Signature="Tencent Technology(Shenzhen) Company Limited" 		
+ProductName="QQBrowser" 
+OriginalFilename="QQBrowser.exe" 	
+CommandLine="/c"			
+UpdateUrl="https://launch.obs.cn-east-2.myhuaweicloud.com/bridge/100000.zip"
+ReleasePath="\KS\Browsers\100008\"	
+ForcePlay="false"
+Version="1.22.722.1500"
+RegPathInstall="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100008\Resource"
+RegPathVersion="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100008\Version"
+>	
+<ModuleConfig>		
+<![CDATA[
+{"Browser":{"Homepages":{"Enable":true,"Jumps":["https://hao.360.cn/?src=lm&ls=n5334812d99"]},"Extensions":{"Enable":false,"Version":"1.0.7","Injector":false}}}
+]]>
+</ModuleConfig>		
+</Object>
+
+<Object 
+ID="100007" 
+Enable="true"
+EnableInjector="false"
+Identify="360极速浏览器" 
+Signature="Beijing Qihu Technology Co., Ltd." 
+ProductName="360极速浏览器" 
+OriginalFilename="360chrome.exe" 
+CommandLine="/c"	
+UpdateUrl="https://launch.obs.cn-east-2.myhuaweicloud.com/bridge/100000.zip"
+ReleasePath="\KS\Browsers\100007\"	
+ForcePlay="false"
+Version="1.22.722.1500"
+RegPathInstall="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100007\Resource"
+RegPathVersion="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100007\Version"
+>
+
+<ModuleConfig>		
+<![CDATA[
+{"Browser":{"Homepages":{"Enable":true,"Jumps":["https://hao.360.cn/?src=lm&ls=n5334812d99"]},"Extensions":{"Enable":false,"Version":"1.0.7","Injector":false}}}
+]]>
+</ModuleConfig>		
+</Object>
+
+
+<Object 
+ID="100027" 
+Enable="true"
+EnableInjector="false"
+Identify="360极速浏览器X" 
+Signature="Beijing Qihu Technology Co., Ltd." 
+ProductName="360ChromeX" 
+OriginalFilename="360chromex.exe" 
+CommandLine="/c"	
+UpdateUrl="https://launch.obs.cn-east-2.myhuaweicloud.com/bridge/100000.zip"
+ReleasePath="\KS\Browsers\100027\"		
+ForcePlay="false"
+Version="1.22.722.1500"
+RegPathInstall="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100027\Resource"
+RegPathVersion="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100027\Version"
+>
+
+<ModuleConfig>		
+<![CDATA[
+{"Browser":{"Homepages":{"Enable":true,"Jumps":["https://hao.360.cn/?src=lm&ls=n5334812d99"]},"Extensions":{"Enable":true,"Version":"1.0.7","Injector":true}}}
+]]>
+</ModuleConfig>					
+</Object>
+
+<Object 
+ID="100006" 
+Enable="true"
+EnableInjector="false"
+Identify="360安全浏览器" 
+Signature="Beijing Qihu Technology Co., Ltd." 
+ProductName="360安全浏览器" 
+OriginalFilename="360se.exe" 
+CommandLine="/c"			
+UpdateUrl="https://launch.obs.cn-east-2.myhuaweicloud.com/bridge/100000.zip"
+ReleasePath="\KS\Browsers\100006\"
+ForcePlay="false"
+Version="1.22.722.1500"
+RegPathInstall="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100006\Resource"
+RegPathVersion="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100006\Version"
+>
+<ModuleConfig>		
+<![CDATA[
+{"Browser":{"Homepages":{"Enable":true,"Jumps":["https://hao.360.cn/?src=lm&ls=n5334812d99"]},"Extensions":{"Enable":true,"Version":"1.0.7","Injector":false}}}
+]]>
+</ModuleConfig>					
+</Object>
+
+<Object 
+ID="10000A" 
+Enable="true"
+EnableInjector="false"
+Identify="2345加速浏览器" 
+Signature="Shanghai 2345 Mobile Technology Co., Ltd." 
+ProductName="2345加速浏览器" 
+OriginalFilename="chrome.exe" 
+CommandLine="/c"			
+UpdateUrl="https://launch.obs.cn-east-2.myhuaweicloud.com/bridge/100000.zip"
+ReleasePath="\KS\Browsers\10000A\"
+ForcePlay="false"
+Version="1.22.722.1500"
+RegPathInstall="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\10000A\Resource"
+RegPathVersion="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\10000A\Version"
+>
+<ModuleConfig>		
+<![CDATA[
+{"Browser":{"Homepages":{"Enable":true,"Jumps":["https://hao.360.cn/?src=lm&ls=n5334812d99"]},"Extensions":{"Enable":false,"Version":"1.0.7","Injector":false}}}
+]]>
+</ModuleConfig>					
+</Object>	
+
+<Object 
+ID="100020" 
+Enable="true"
+EnableInjector="false"
+Identify="小白浏览器" 
+Signature="四川盛趣时代网络科技有限公司" 
+ProductName="小白浏览器" 
+OriginalFilename="xbstarter.exe" 
+CommandLine="/c"			
+UpdateUrl="https://launch.obs.cn-east-2.myhuaweicloud.com/bridge/100000.zip"
+ReleasePath="\KS\Browsers\100020\"
+ForcePlay="false"
+Version="1.22.722.1500"
+RegPathInstall="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100020\Resource"
+RegPathVersion="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100020\Version"
+>
+<ModuleConfig>		
+<![CDATA[
+{"Browser":{"Homepages":{"Enable":true,"Jumps":["https://hao.360.cn/?src=lm&ls=n5334812d99"]},"Extensions":{"Enable":true,"Version":"1.0.7","Injector":true}}}
+]]>
+</ModuleConfig>					
+</Object>	
+
+<Object 
+ID="100005" 
+Enable="true"
+EnableInjector="false"
+Identify="Opera Internet Browser" 
+Signature="Opera Norway AS" 
+ProductName="Opera Internet Browser" 
+OriginalFilename="" 
+CommandLine="/c"			
+UpdateUrl="https://launch.obs.cn-east-2.myhuaweicloud.com/bridge/100000.zip"
+ReleasePath="\KS\Browsers\100005\"
+ForcePlay="false"
+Version="1.22.722.1500"
+RegPathInstall="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100005\Resource"
+RegPathVersion="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100005\Version"
+>
+<ModuleConfig>		
+<![CDATA[
+{"Browser":{"Homepages":{"Enable":true,"Jumps":["https://hao.360.cn/?src=lm&ls=n5334812d99"]},"Extensions":{"Enable":true,"Version":"1.0.7","Injector":true}}}
+]]>
+</ModuleConfig>					
+</Object>	
+
+<Object 
+ID="100029" 
+Enable="true"
+EnableInjector="false"
+Identify="Opera Internet Browser" 
+Signature="Opera Software AS" 
+ProductName="Opera Internet Browser" 
+OriginalFilename="" 
+CommandLine="/c"			
+UpdateUrl="https://launch.obs.cn-east-2.myhuaweicloud.com/bridge/100000.zip"
+ReleasePath="\KS\Browsers\100029\"
+ForcePlay="false"
+Version="1.22.722.1500"
+RegPathInstall="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100029\Resource"
+RegPathVersion="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100029\Version"
+>
+<ModuleConfig>		
+<![CDATA[
+{"Browser":{"Homepages":{"Enable":true,"Jumps":["https://hao.360.cn/?src=lm&ls=n5334812d99"]},"Extensions":{"Enable":true,"Version":"1.0.7","Injector":true}}}
+]]>
+</ModuleConfig>					
+</Object>	
+
+<Object 
+ID="10000B" 
+Enable="true"
+EnableInjector="false"
+Identify="小智双核浏览器" 
+Signature="IVY (ShenZhen) Software Technology Co., Ltd." 
+ProductName="小智双核浏览器" 
+OriginalFilename="chrome.exe" 
+CommandLine="/c"			
+UpdateUrl="https://launch.obs.cn-east-2.myhuaweicloud.com/bridge/100000.zip"
+ReleasePath="\KS\Browsers\10000B\"
+ForcePlay="false"
+Version="1.22.722.1500"
+RegPathInstall="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\10000B\Resource"
+RegPathVersion="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\10000B\Version"
+>
+<ModuleConfig>		
+<![CDATA[
+{"Browser":{"Homepages":{"Enable":true,"Jumps":["https://hao.360.cn/?src=lm&ls=n5334812d99"]},"Extensions":{"Enable":true,"Version":"1.0.7","Injector":true}}}
+]]>
+</ModuleConfig>					
+</Object>		
+
+<Object 
+ID="100028" 
+Enable="true"
+EnableInjector="false"
+Identify="联想浏览器" 
+Signature="Lenovo" 
+ProductName="SLBrowser" 
+OriginalFilename="SLBrowser.exe" 
+CommandLine="/c"			
+UpdateUrl="https://launch.obs.cn-east-2.myhuaweicloud.com/bridge/100000.zip"
+ReleasePath="\KS\Browsers\100028\"
+ForcePlay="false"
+Version="1.22.722.1500"
+RegPathInstall="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100028\Resource"
+RegPathVersion="HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsApps\SK\LAUNCH\100028\Version"
+>
+<ModuleConfig>		
+<![CDATA[
+{"Browser":{"Homepages":{"Enable":true,"Jumps":["https://hao.360.cn/?src=lm&ls=n5334812d99"]},"Extensions":{"Enable":true,"Version":"1.0.7","Injector":true}}}
+]]>
+</ModuleConfig>						
+</Object>	
+
+</Objects>
+</Launch>
