@@ -140,7 +140,8 @@
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>call $(SolutionDir)..\..\compile\scripts\projects\PostBuildEvent_bridge_launch.bat $(Configuration) $(Platform) $(OutDir)$(TargetName)$(TargetExt)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -204,7 +205,8 @@
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>call $(SolutionDir)..\..\compile\scripts\projects\PostBuildEvent_bridge_launch.bat $(Configuration) $(Platform) $(OutDir)$(TargetName)$(TargetExt)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
