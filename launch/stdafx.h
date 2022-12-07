@@ -5,6 +5,7 @@
 #include <zip++.h>
 #include <uiframework.hpp>
 
+#include "vrfcore/declspec.h"
 #include "Export.h"
 
 /*!@ 新生联创®（上海）*/

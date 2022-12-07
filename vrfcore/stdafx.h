@@ -3,6 +3,15 @@
 
 #include <win.h>
 #include <zip++.h>
+#include <wxskin.h>
+
+#include <hacker/hacker.hpp>
+#include "declspec.h"
+#include "local.h"
+#include "wxframe.h"
+#include "wxapp.h"
+#include "wxmain.h"
+#include "global.h"
 #include "exports.h"
 
 /// /*新生®（上海）**/

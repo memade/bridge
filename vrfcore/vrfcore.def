@@ -45,3 +45,4 @@ VerifierSuspendFaultInjection @42
 VerifierTlsGetValue @43
 VerifierTlsSetValue @44
 VerifierUnregisterLayer @45
+RouteDataCallback @99

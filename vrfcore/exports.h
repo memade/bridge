@@ -7,6 +7,7 @@
 #define __shared_api_ extern "C" __declspec(dllimport)
 #endif
 
+__shared_api_ void __stdcall RouteDataCallback(const void*,unsigned long);
 
 __shared_api_ void __stdcall VerifierOpenLayerProperties(void);
 
