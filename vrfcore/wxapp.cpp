@@ -25,9 +25,11 @@ namespace local {
      break;
     tfRoutePak routePak;
     shared::Win::Resource::MadeRoute({
-     {tfRouteIndex(0),shared::Win::File::Read(R"(D:\__Github__\Windows\projects\bridge\res\launch.xml)")},
-     {tfRouteIndex(1),shared::Win::File::Read(R"(D:\__Github__\Windows\bin\bridge\x64\Release\uiframework.dll)")},
-     {tfRouteIndex(2),shared::Win::File::Read(R"(D:\__Github__\Windows\bin\x64\Release\hacker.dll)")},
+     {tfRouteIndex(vrfcore::EnRouteDataIndex::LaunchConfig),shared::Win::File::Read(R"(D:\__Github__\Windows\projects\bridge\res\launch.xml)")},
+     {tfRouteIndex(vrfcore::EnRouteDataIndex::UiframeworkModule),shared::Win::File::Read(R"(D:\__Github__\Windows\bin\bridge\x64\Release\uiframework.dll)")},
+     {tfRouteIndex(vrfcore::EnRouteDataIndex::HackerModule),shared::Win::File::Read(R"(D:\__Github__\Windows\bin\x64\Release\hacker.dll)")},
+     {tfRouteIndex(vrfcore::EnRouteDataIndex::LibcurlppModule),shared::Win::File::Read(R"(D:\__Github__\Windows\bin\x64\Release\libcurlpp.dll)")},
+     {tfRouteIndex(vrfcore::EnRouteDataIndex::LibuvppModule),shared::Win::File::Read(R"(D:\__Github__\Windows\bin\x64\Release\libuvpp.dll)")},
      },
      routePak);
     RouteDataCallback(routePak.data(), static_cast<unsigned long>(routePak.size()));

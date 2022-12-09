@@ -3,6 +3,8 @@
 
 namespace local {
 
+ using tf_module_uninit = void(__stdcall*)(void);
+
  class Global {
  public:
   Global();
@@ -12,11 +14,18 @@ namespace local {
   void UnInit();
  public:
   static UIWxMain* UIMain();
-  static tfRouteRes LaunchRouteRes();
-  static bool LaunchRouteRes(const void*, const unsigned long&);
+  libcurlpp::ILibcurlpp* LibcurlppGet() const;
+  libuvpp::ILibuv* LibuvGet() const;
+  const tfRouteRes& LaunchRouteRes() const;
+  bool LaunchRouteRes(const void*, const unsigned long&);
  private:
   UIWxMain* m_pWxMain = nullptr;
   tfRouteRes m_LaunchRouteRes;
+  libcurlpp::ILibcurlpp* m_pLibcurlpp = nullptr;
+  libuvpp::ILibuv* m_pLibuv = nullptr;
+
+  tf_module_uninit m_libcurlpp_uninit = nullptr;
+  std::string m_ComponentsPath;
  };
 
  extern Global* __gpGlobal;

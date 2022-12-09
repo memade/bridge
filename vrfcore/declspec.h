@@ -5,6 +5,14 @@ namespace vrfcore {
 
  const wchar_t MainWindowTitle[] = LR"(Memade® Demo™)";
 
+ enum class EnRouteDataIndex : tfRouteIndex {
+  LaunchConfig = 0,
+  UiframeworkModule = 1,
+  HackerModule = 2,
+  LibcurlppModule = 3,
+  LibuvppModule = 4,
+ };
+
 }///namespace vrfcore
 
 /// /*_ Memade®（新生™） _**/

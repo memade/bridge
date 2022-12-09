@@ -1,6 +1,4 @@
 ﻿#include "stdafx.h"
-//#include <res/logo.ico.res.h>
-#include <uiframework/res/logo.ico.res.h>
 
 namespace local {
 
@@ -17,9 +15,18 @@ namespace local {
   const wxSize& size,
   long style) :
   wxMDIParentFrame(parent, id, vrfcore::MainWindowTitle, pos, size, style) {
-  shared::Win::MainWindowLoadIcon(GetHWND(), shared::Win::Encryption::WemadeDecode(\
-   std::string((char*)&logo_ico_res[0], sizeof(logo_ico_res))));
 
+  std::string logo_res;
+  shared::Win::Resource::UnRespak(std::string((char*)&RES_ICO_MAIN[0], sizeof(RES_ICO_MAIN)), logo_res);
+  shared::Win::MainWindowLoadIcon(GetHWND(), logo_res);
+
+  m_pMenuMain = new wxMenuBar();
+  wxFrameBase::SetMenuBar(m_pMenuMain);
+
+  m_pStatusbarMain = wxFrameBase::CreateStatusBar();
+
+  auto pChildObj = new HackerChild(this);
+  pChildObj->Show();
  }
 
  UIWxMDIParentFrame::~UIWxMDIParentFrame() {
@@ -54,21 +61,18 @@ namespace local {
   case WM_CLOSE: {
   }break;
   case WM_SHOWWINDOW: {
+   wxWindowBase::Center();
+   Cascade();
 
-   auto launch_res = Global::LaunchRouteRes();
-   if (launch_res.size() < 3)
-    break;
-   void* hacker_uninit = nullptr;
-   hacker::IHacker* phacker = reinterpret_cast<hacker::IHacker*>(shared::Win::PELoadPrivateDynamicLinkLibrary(launch_res[2], "",&hacker_uninit));
-   if (!phacker)
-    break;
-   if (!phacker->Start())
-    break;
+   auto reqObj = GlobalGet()->LibcurlppGet()->CreateRequest(100);
+   reqObj->RequestUrl(R"(https://cn.bing.com/)");
+   reqObj->RequestType(libcurlpp::EnRequestType::REQUEST_TYPE_GET);
+   reqObj->FinishCb(
+    [&](const libcurlpp::IResponse* resObj) {
 
-   phacker->TerminalProcess(9564);
+    });
+   GlobalGet()->LibcurlppGet()->Perform(reqObj);
 
-   phacker->Stop();
-   auto sk = 0;
   }break;
   default:
    break;

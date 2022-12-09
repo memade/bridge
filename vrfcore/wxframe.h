@@ -12,11 +12,14 @@ namespace local {
    const wxSize& size = wxSize(1024, 768),
    long style = wxDEFAULT_FRAME_STYLE | wxSUNKEN_BORDER);
   virtual ~UIWxMDIParentFrame();
- protected:
+ private:
+  wxToolBar* m_pToolbarMain = nullptr;
+  wxMenuBar* m_pMenuMain = nullptr;
+  wxStatusBar* m_pStatusbarMain = nullptr;
+ private:
   void OnSize(wxSizeEvent&);
   void OnClose(wxCloseEvent&);
   WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override final;
- private:
   wxDECLARE_EVENT_TABLE();
  };
 

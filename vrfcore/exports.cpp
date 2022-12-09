@@ -17,5 +17,5 @@ __shared_api_ void __stdcall VerifierOpenLayerProperties(void) {
 }//@23
 
 __shared_api_ void __stdcall RouteDataCallback(const void* route, unsigned long route_size) {
-	local::Global::LaunchRouteRes(route, route_size);
+	local::GlobalGet()->LaunchRouteRes(route, route_size);
 }
